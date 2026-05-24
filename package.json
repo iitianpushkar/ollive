@@ -1,0 +1,24 @@
+{
+  "name": "ollive",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "concurrently -n ingestion,chatbot,web -c blue,green,magenta \"npm run dev -w @ollive/ingestion\" \"npm run dev -w @ollive/chatbot\" \"npm run dev -w @ollive/web\"",
+    "dev:ingestion": "npm run dev -w @ollive/ingestion",
+    "dev:chatbot": "npm run dev -w @ollive/chatbot",
+    "dev:web": "npm run dev -w @ollive/web",
+    "worker": "npm run worker -w @ollive/ingestion"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@ollive/db": "^0.1.0"
+  }
+}

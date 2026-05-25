@@ -4,6 +4,7 @@ import { config, PROVIDER_ID } from "../config.js";
 import {
   cancelConversation,
   createConversation,
+  deleteConversation,
   getConversation,
   getMessages,
   listConversations,
@@ -69,4 +70,13 @@ conversationsRouter.post("/:id/cancel", async (req, res) => {
     return;
   }
   res.json(conv);
+});
+
+conversationsRouter.delete("/:id", async (req, res) => {
+  const deleted = await deleteConversation(String(req.params.id));
+  if (!deleted) {
+    res.status(404).json({ error: "Not found" });
+    return;
+  }
+  res.status(204).send();
 });

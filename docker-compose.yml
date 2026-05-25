@@ -1,0 +1,88 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ollive-postgres
+    environment:
+      POSTGRES_USER: ollive
+      POSTGRES_PASSWORD: ollive_secret
+      POSTGRES_DB: ollive
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    container_name: ollive-redis
+    ports:
+      - "6379:6379"
+
+  ingestion:
+    build:
+      context: .
+      dockerfile: services/ingestion/Dockerfile
+    container_name: ollive-ingestion
+    environment:
+      PORT: 8001
+      DATABASE_URL: postgresql://ollive:ollive_secret@postgres:5432/ollive
+      REDIS_URL: redis://redis:6379
+      INGESTION_API_KEY: dev-ingestion-key
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8001:8001"
+
+  ingestion-worker:
+    build:
+      context: .
+      dockerfile: services/ingestion/Dockerfile
+    container_name: ollive-ingestion-worker
+    command: ["npm", "run", "worker:prod", "-w", "@ollive/ingestion"]
+    environment:
+      DATABASE_URL: postgresql://ollive:ollive_secret@postgres:5432/ollive
+      REDIS_URL: redis://redis:6379
+      INGESTION_API_KEY: dev-ingestion-key
+    depends_on:
+      - ingestion
+
+  chatbot:
+    build:
+      context: .
+      dockerfile: services/chatbot/Dockerfile
+    container_name: ollive-chatbot
+    environment:
+      PORT: 8000
+      DATABASE_URL: postgresql://ollive:ollive_secret@postgres:5432/ollive
+      REDIS_URL: redis://redis:6379
+      INGESTION_URL: http://ingestion:8001
+      INGESTION_API_KEY: dev-ingestion-key
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENROUTER_BASE_URL: https://openrouter.ai/api/v1
+      OPENROUTER_SITE_URL: http://localhost:3000
+      OPENROUTER_APP_NAME: Ollive
+      CORS_ORIGIN: http://localhost:3000
+      DEFAULT_MODEL: openai/gpt-4o-mini
+    depends_on:
+      - postgres
+      - redis
+      - ingestion
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: ollive-web
+    environment:
+      NEXT_PUBLIC_CHATBOT_URL: http://localhost:8000
+      NEXT_PUBLIC_INGESTION_URL: http://localhost:8001
+    depends_on:
+      - chatbot
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

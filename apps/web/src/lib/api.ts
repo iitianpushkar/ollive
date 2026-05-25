@@ -72,12 +72,11 @@ export async function getConversation(id: string): Promise<Conversation & { mess
   return res.json();
 }
 
-export async function cancelConversation(id: string): Promise<Conversation> {
-  const res = await fetch(`${CHATBOT_URL}/api/conversations/${id}/cancel`, {
-    method: "POST",
+export async function deleteConversation(id: string): Promise<void> {
+  const res = await fetch(`${CHATBOT_URL}/api/conversations/${id}`, {
+    method: "DELETE",
   });
-  if (!res.ok) throw new Error("Failed to cancel");
-  return res.json();
+  if (!res.ok) throw new Error("Failed to delete conversation");
 }
 
 export async function cancelStream(conversationId: string): Promise<void> {
@@ -95,19 +94,21 @@ export async function fetchMetrics() {
 export function streamChat(
   conversationId: string,
   message: string,
-  options: { model?: string },
+  options: { model?: string; resume?: boolean },
   handlers: {
     onChunk: (text: string) => void;
     onDone: (data: { messageId: string; content: string }) => void;
     onError: (msg: string) => void;
-    onCancelled: () => void;
+    onCancelled: (data?: { partial?: string; messageId?: string }) => void;
   }
 ): AbortController {
   const controller = new AbortController();
 
   void (async () => {
     try {
-      const res = await fetch(`${CHATBOT_URL}/api/chat/${conversationId}`, {
+      const res = await fetch(
+        `${CHATBOT_URL}/api/chat/${conversationId}${options.resume ? "/resume" : ""}`,
+        {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -116,7 +117,8 @@ export function streamChat(
           model: options.model,
         }),
         signal: controller.signal,
-      });
+        }
+      );
 
       if (!res.ok || !res.body) {
         const err = await res.json().catch(() => ({}));
@@ -152,7 +154,12 @@ export function streamChat(
               content: String(parsed.content),
             });
           if (event === "error") handlers.onError(String(parsed.message ?? "Error"));
-          if (event === "cancelled") handlers.onCancelled();
+          if (event === "cancelled") {
+            handlers.onCancelled({
+              partial: parsed.partial ? String(parsed.partial) : undefined,
+              messageId: parsed.messageId ? String(parsed.messageId) : undefined,
+            });
+          }
         }
       }
     } catch (err) {

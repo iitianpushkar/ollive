@@ -2,62 +2,44 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_60%)]" />
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-16">
+      <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl" />
 
-      <div className="relative z-10 max-w-5xl text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-white/70 backdrop-blur-xl">
-          <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-          AI Inference Observability Platform
-        </div>
-
-        <h1 className="gradient-text text-7xl font-black leading-[0.95] tracking-tight md:text-8xl">
-          Observe
+      <div className="glass z-10 w-full max-w-4xl rounded-3xl p-10 md:p-14">
+        <p className="mb-4 text-sm uppercase tracking-[0.2em] text-[var(--muted)]">
+          LLM Inference Observability
+        </p>
+        <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] md:text-6xl">
+          Chat fast.
           <br />
-          Intelligence.
+          Measure everything.
         </h1>
-
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-slate-400">
-          A cinematic AI chat and observability platform with realtime
-          streaming, inference logging, provider tracing, and live metrics.
+        <p className="mt-5 max-w-2xl text-lg text-[var(--muted)]">
+          Multi-turn streaming chat with inference logging, ingestion, and operational dashboards.
+          Built for realistic LLM product workflows.
         </p>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-5">
+        <div className="mt-8 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
+          <span className="rounded-full border border-[var(--border)] px-3 py-1">Realtime streaming</span>
+          <span className="rounded-full border border-[var(--border)] px-3 py-1">Token + latency logs</span>
+          <span className="rounded-full border border-[var(--border)] px-3 py-1">Provider-level metrics</span>
+        </div>
+
+        <nav className="mt-10 flex flex-wrap gap-4">
           <Link
             href="/chat"
-            className="group rounded-2xl bg-white px-8 py-4 font-semibold text-black transition-all duration-300 hover:scale-105"
+            className="rounded-xl bg-[var(--accent)] px-6 py-3 font-medium text-black hover:opacity-90"
           >
             Open Chat
           </Link>
-
           <Link
             href="/dashboard"
-            className="glass rounded-2xl px-8 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:bg-white/10"
+            className="rounded-xl border border-[var(--border)] px-6 py-3 font-medium hover:bg-[var(--surface)]"
           >
             View Dashboard
           </Link>
-        </div>
-
-        <div className="mt-20 grid gap-6 md:grid-cols-3">
-          {[
-            "Realtime streaming",
-            "Inference logging",
-            "Multi-provider AI",
-          ].map((item) => (
-            <div
-              key={item}
-              className="glass rounded-3xl p-6 text-left shadow-2xl"
-            >
-              <div className="mb-4 h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-400" />
-
-              <h3 className="text-lg font-semibold">{item}</h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Premium observability and AI-native interaction design.
-              </p>
-            </div>
-          ))}
-        </div>
+        </nav>
       </div>
     </main>
   );

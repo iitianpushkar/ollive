@@ -1,4 +1,6 @@
-# Ollive — LLM Inference Logging Platform
+# 🚀 Ollive — LLM Inference Logging Platform
+
+<div align="center">
 
 A full-stack TypeScript platform for **chat**, **LLM inference observability**, and **metrics dashboards**.
 
@@ -11,9 +13,20 @@ Built as an end-to-end inference logging and ingestion system with:
 - Real-time metrics dashboards
 - Multi-provider LLM support
 
+<br/>
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Next JS](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-222222?style=for-the-badge&logo=express&logoColor=white)
+![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+
+</div>
+
 ---
 
-# Stack
+# ✨ Stack
 
 - **Frontend:** Next.js 15 + Tailwind CSS
 - **Backend:** Express.js
@@ -25,32 +38,32 @@ Built as an end-to-end inference logging and ingestion system with:
 
 ---
 
-# Features
+# ⚡ Features
 
 | Feature | Implementation |
 |---|---|
-| Multi-turn chatbot | Express chatbot + Next.js UI with context window |
-| Streaming responses | Server-Sent Events (SSE) |
-| Inference SDK | `@ollive/sdk` trace wrapper |
-| Observability | Logging, latency, tokens, errors |
-| PII redaction | Sensitive preview masking |
-| Event-driven ingestion | Redis Streams consumer groups |
-| Metrics dashboard | Recharts visualizations |
-| Multi-provider support | OpenRouter integration |
-| Conversation management | Resume / cancel chat sessions |
-| Docker support | One-command local setup |
+| 💬 Multi-turn chatbot | Express chatbot + Next.js UI with context window |
+| ⚡ Streaming responses | Server-Sent Events (SSE) |
+| 🛰️ Inference SDK | `@ollive/sdk` trace wrapper |
+| 📊 Observability | Logging, latency, tokens, errors |
+| 🔒 PII redaction | Sensitive preview masking |
+| 📦 Event-driven ingestion | Redis Streams consumer groups |
+| 📈 Metrics dashboard | Recharts visualizations |
+| 🌍 Multi-provider support | OpenRouter integration |
+| 🔄 Conversation management | Resume / cancel chat sessions |
+| 🐳 Docker support | One-command local setup |
 
 ---
 
-# Architecture
+# 🏗️ Architecture
 
 Ollive is structured as a TypeScript monorepo with three runtime layers.
 
 | Layer | Stack | Responsibility |
 |---|---|---|
-| Web | Next.js 15 | Chat UI + Dashboard |
-| Chatbot | Express | LLM orchestration + streaming |
-| Ingestion | Express + Worker | Logging pipeline + metrics |
+| 🌐 Web | Next.js 15 | Chat UI + Dashboard |
+| 🤖 Chatbot | Express | LLM orchestration + streaming |
+| 📥 Ingestion | Express + Worker | Logging pipeline + metrics |
 
 Shared packages:
 
@@ -59,7 +72,7 @@ Shared packages:
 
 ---
 
-## System Diagram
+## 🧭 System Diagram
 
 ```text
 ┌─────────────┐     REST/SSE      ┌──────────────┐
@@ -91,9 +104,9 @@ Shared packages:
 
 ---
 
-# Quick Start (Docker)
+# 🚀 Quick Start (Docker)
 
-## 1. Clone Repository
+## 1️⃣ Clone Repository
 
 ```bash
 git clone <your-repo-url>
@@ -102,7 +115,7 @@ cd ollive
 
 ---
 
-## 2. Create Environment File
+## 2️⃣ Create Environment File
 
 ```bash
 cp .env.example .env
@@ -116,7 +129,7 @@ OPENROUTER_API_KEY=sk-or-...
 
 ---
 
-## 3. Start Everything
+## 3️⃣ Start Everything
 
 ```bash
 docker compose up --build
@@ -124,17 +137,17 @@ docker compose up --build
 
 ---
 
-# Services
+# 🌐 Services
 
 | Service | URL |
 |---|---|
-| Web UI | http://localhost:3000 |
-| Chatbot API | http://localhost:8000 |
-| Ingestion API | http://localhost:8001 |
+| 🌐 Web UI | http://localhost:3000 |
+| 🤖 Chatbot API | http://localhost:8000 |
+| 📥 Ingestion API | http://localhost:8001 |
 
 ---
 
-# Project Structure
+# 📂 Project Structure
 
 ```text
 ollive/
@@ -157,9 +170,9 @@ ollive/
 
 ---
 
-# API Overview
+# 🔌 API Overview
 
-# Chatbot API (`:8000`)
+# 🤖 Chatbot API (`:8000`)
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -172,7 +185,7 @@ ollive/
 
 ---
 
-# Ingestion API (`:8001`)
+# 📥 Ingestion API (`:8001`)
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -187,7 +200,7 @@ X-API-Key: <INGESTION_API_KEY>
 
 ---
 
-# Ingestion Pipeline
+# 📦 Ingestion Pipeline
 
 1. Chatbot wraps every LLM call with `OlliveLogger.trace()`
 2. SDK captures metadata and inference metrics
@@ -202,7 +215,7 @@ X-API-Key: <INGESTION_API_KEY>
 
 ---
 
-# Why Async Ingestion?
+# ⚡ Why Async Ingestion?
 
 Separating logging from the inference request path prevents database writes from increasing chatbot latency.
 
@@ -215,7 +228,7 @@ Benefits:
 
 ---
 
-# SDK Usage
+# 🛰️ SDK Usage
 
 ```ts
 import { OlliveLogger } from "@ollive/sdk";
@@ -247,21 +260,21 @@ await logger.trace(
 
 ---
 
-# Logging Strategy
+# 📊 Logging Strategy
 
-## Near Real-Time Logging
+## ⚡ Near Real-Time Logging
 
 Logs are sent immediately without batching.
 
 ---
 
-## Best-Effort Delivery
+## 🛡️ Best-Effort Delivery
 
 SDK logging failures never break chat functionality.
 
 ---
 
-## PII Redaction
+## 🔒 PII Redaction
 
 Sensitive data is masked before transmission:
 
@@ -273,7 +286,7 @@ Sensitive data is masked before transmission:
 
 ---
 
-## Preview-Only Storage
+## 🧾 Preview-Only Storage
 
 The system does not store full prompts or responses.
 
@@ -287,7 +300,7 @@ Only:
 
 ---
 
-# Database Schema
+# 🗄️ Database Schema
 
 ## `conversations`
 
@@ -327,14 +340,14 @@ Pre-aggregated metrics rollups for fast dashboards.
 
 ---
 
-# Event-Driven Architecture
+# 📦 Event-Driven Architecture
 
 Redis Streams acts as the event bus between:
 
 | Component | Responsibility |
 |---|---|
-| Ingestion API | Produces events |
-| Worker | Consumes and persists events |
+| 📥 Ingestion API | Produces events |
+| 👷 Worker | Consumes and persists events |
 
 Consumer groups enable:
 
@@ -344,7 +357,7 @@ Consumer groups enable:
 
 ---
 
-# Multi-Provider LLM Support
+# 🌍 Multi-Provider LLM Support
 
 All LLM traffic routes through OpenRouter using the OpenAI-compatible Chat Completions API.
 
@@ -366,15 +379,15 @@ anthropic/claude-sonnet-4
 
 ---
 
-# Metrics Dashboard
+# 📈 Metrics Dashboard
 
 Dashboard visualizes:
 
-- Latency
-- Request throughput
-- Error rate
-- Token usage
-- Provider distribution
+- ⚡ Latency
+- 📈 Request throughput
+- ❌ Error rate
+- 🪙 Token usage
+- 🌍 Provider distribution
 
 Built with:
 
@@ -384,21 +397,21 @@ Built with:
 
 ---
 
-# Scaling Considerations
+# 📈 Scaling Considerations
 
-## Ingestion API
+## 📥 Ingestion API
 
 Stateless and horizontally scalable.
 
 ---
 
-## Workers
+## 👷 Workers
 
 Scale independently through Redis consumer groups.
 
 ---
 
-## PostgreSQL
+## 🗄️ PostgreSQL
 
 Potential future optimizations:
 
@@ -408,13 +421,13 @@ Potential future optimizations:
 
 ---
 
-## Redis
+## ⚡ Redis
 
 Streams can be trimmed with `MAXLEN` to prevent memory growth.
 
 ---
 
-# Failure Handling
+# 🛡️ Failure Handling
 
 | Failure | Behavior |
 |---|---|
@@ -427,16 +440,16 @@ Streams can be trimmed with `MAXLEN` to prevent memory growth.
 
 ---
 
-# Security Notes
+# 🔐 Security Notes
 
-- Ingestion API protected with `X-API-Key`
-- CORS restricted to frontend origin
-- Secrets stored in `.env` or Kubernetes Secrets
-- Sensitive previews redacted before persistence
+- 🔑 Ingestion API protected with `X-API-Key`
+- 🌐 CORS restricted to frontend origin
+- 🛡️ Secrets stored in `.env` or Kubernetes Secrets
+- 🔒 Sensitive previews redacted before persistence
 
 ---
 
-# Demo Flow
+# 🎬 Demo Flow
 
 1. Start stack with Docker Compose
 2. Open chat UI
